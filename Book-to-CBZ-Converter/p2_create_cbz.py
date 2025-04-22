@@ -31,7 +31,7 @@ input_dir = os.getcwd()  # Default to current directory. Change if needed.
 # Flags to control file deletions and features
 delete_pdf = True  # Set to True to delete the original PDF after processing. False keeps it.
 delete_json = True  # Set to True to delete the JSON files after processing. False keeps it.
-crop_white_margins_enabled = True  # Set to True to crop white margins from images. False skips cropping.
+crop_white_margins_enabled = False  # Set to True to crop white margins from images (recommended). False skips cropping.
 create_comicinfo_enabled = True  # Set to True to create a ComicInfo.xml file. False skips it.
 chapter_page_filter_threshold = 8  # Threshold for filtering chapter pages if 'chapter 2' in toc is not found.
 min_chapters_for_split = 3  # Minimum number of chapters to trigger chapter splitting.

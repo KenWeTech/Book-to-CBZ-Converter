@@ -38,6 +38,11 @@ min_chapters_for_split = 3  # Minimum number of chapters to trigger chapter spli
 overwrite_existing_cbz = True # Set to True to overwrite existing cbz files. False skips if it exist
 remove_prefix_cbz = True  # Flag to control 'V ' prefix removal for CBZ
 
+
+# =============================================================
+# =           Edit Below At Your Own Risk                     =
+# =============================================================
+
 # --- Function: Color code text ---
 try:
     from colorama import Fore, Style, init as colorama_init

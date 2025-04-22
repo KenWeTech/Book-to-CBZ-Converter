@@ -25,7 +25,7 @@ CONFIG_FLAGS = {
     'p2_create_cbz.py': {
         'delete_pdf': (bool, "Delete PDF files after processing? (set to false if this is in your calibre library and you want to keep this format) (True/False)", True),
         'delete_json': (bool, "Delete JSON files after processing? (chapters and metadata files that were created for conversion) (True/False)", True),
-        'crop_white_margins_enabled': (bool, "Crop white margins from pages? (reduces the empty white space thats not text, optional) (True/False)", True),
+        'crop_white_margins_enabled': (bool, "Crop white margins from pages? (reduces the empty white space thats not text, optional but True is recommended) (True/False)", False),
         'create_comicinfo_enabled': (bool, "Create ComicInfo.xml file for keeping metadata? (Set FALSE for file structure naming convention in Kavita for example) (True/False)", True),
         'chapter_page_filter_threshold': (int, "Chapter page filter threshold: (number of pages to still be considered chapter 1) (integer)", 8),
         'min_chapters_for_split': (int, "Minimum chapters needed to split CBZ Book into chapters, set to 9999 to make a single CBZ for book. (integer)", 3),

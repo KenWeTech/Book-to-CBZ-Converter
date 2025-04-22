@@ -34,6 +34,11 @@ run_extract_toc = True    # Set to True to extract the table of contents from PD
 font_size = 30  # Default font size for the converted PDF.
 REMOVE_KEYWORDS = ['About the Author', 'Prologue', 'Epilogue', 'Contents', 'Notes', 'Dedication', 'Acknowledgments', 'About the Publisher', 'Copyright'] # Keywords to Remove from TOC
 
+
+# =============================================================
+# =           Edit Below At Your Own Risk                     =
+# =============================================================
+
 # --- Function: Color code text ---
 try:
     from colorama import Fore, Style, init as colorama_init

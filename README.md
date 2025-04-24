@@ -43,8 +43,8 @@ The `get_deps` folder contains scripts to help you install all the necessary dep
     ```
     This script provides an interactive menu to run the following dependency installation scripts:
 
-    * `install_dependencies_p1.py`: Installs core Python dependencies (`PyPDF2`, `ebooklib`, `beautifulsoup4`, `colorama`) and attempts to install Calibre automatically based on your operating system (using Winget on Windows, a direct download script on Linux, and brew cask on macOS).
-    * `install_dependencies_p2.py`: Installs additional Python dependencies (`Pillow`, `fitz`, `PyPDF2`, `numpy`, `ebooklib`) and attempts to install **ImageMagick** automatically based on your operating system (using Winget on Windows, `apt-get` on Linux, and Homebrew on macOS).
+    * `install_dependencies_p1.py`: Installs core Python dependencies (`PyPDF2`, `ebooklib`, `beautifulsoup4`, `colorama`) and attempts to install Calibre automatically based on your operating system (using Winget on Windows, a direct download script on Linux, and brew cask on macOS). Which is everything require to run the `p1_process_books.py` script.
+    * `install_dependencies_p2.py`: Installs additional Python dependencies (`Pillow`, `fitz`, `PyPDF2`, `numpy`, `ebooklib`) and attempts to install **ImageMagick** automatically based on your operating system (using Winget on Windows, `apt-get` on Linux, and Homebrew on macOS). Which is everything required to run the `p2_create_cbz.py` script. 
 
     Follow the prompts in the `install_dependencies.py` script to install the necessary components. You can run this script again if needed to verify or reinstall specific dependencies.
 
@@ -83,7 +83,7 @@ For users who want more control or to understand the underlying mechanics, the c
 This script takes your eBook file (ePUB or PDF) as input and prepares it for CBZ creation.
 
 * **ePUB Handling:** When processing ePUB files, this script utilizes **Calibre** for robust format handling and relies on its `ebook-convert` tool to transform the ePUB into a PDF. It prioritizes metadata from the **OPF** file over the PDF since it often contains more comprehensive information. The script also modifies the font size within the ePUB before conversion.
-* **PDF Handling:** For PDF files, the script extracts available metadata if none was created from the OPF file. It also attempts to extract the **Table of Contents (TOC)** embedded in the PDF to identify chapter boundaries for potential splitting in the next stage.
+* **PDF Handling:** For PDF files, the script extracts available metadata if none was created from the OPF file or if one isn't available. It also attempts to extract the **Table of Contents (TOC)** embedded in the PDF to identify chapter boundaries for potential splitting in the next stage.
 * **Intermediate Data:** The script processes the book information, including chapter boundaries (if found), and stores it in **two JSON files** (`.chapters.json` and `metadata.json`). These files act as a bridge, holding the necessary data for the CBZ creation script.
 
 #### b. CBZ Creation (`p2_create_cbz.py`)
@@ -103,7 +103,7 @@ This script provides a user-friendly, interactive way to modify key settings fou
     ```bash
     python configurator.py
     ```
-    **Windows users** can also just double click `configurator.py`
+    **Windows users** can also just double click `configurator.py`, assuming python is already installed.
 
 2.  Follow the prompts to review and modify the settings.
 

@@ -207,15 +207,17 @@ def convert_pdf_to_images(pdf_path, images_dir, start_page, end_page, high_res=F
     os.makedirs(images_dir, exist_ok=True)
 
     command = ["magick", "convert",
-                "-background", "white", "-alpha", "remove",
-                f"{pdf_path}[{start_page-1 if start_page > 0 else 0}-{end_page-2 if end_page and end_page > 1 else 'last'}]",
-                "-gravity", "Center",
-                "-extent", "100%x100%"]
+                "-background", "white", "-alpha", "remove"]
 
     if high_res:
-        command.extend(["-density", "150", "-resize", "150%"])
+        command.extend(["-density", "150", "-resize", "125%"])
 
-    command.append(os.path.join(images_dir, "image-%04d.webp"))
+    command.extend([
+        f"{pdf_path}[{start_page-1 if start_page > 0 else 0}-{end_page-2 if end_page and end_page > 1 else 'last'}]",
+        "-gravity", "Center",
+        "-extent", "100%x100%",
+        os.path.join(images_dir, "image-%04d.webp")
+    ])
 
     try:
         result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)

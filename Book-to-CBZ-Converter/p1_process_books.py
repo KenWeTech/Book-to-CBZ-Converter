@@ -209,7 +209,7 @@ def organize_epub_files(input_dir):
 
             # Folder name should ignore 'Chapters'
             folder_name = os.path.splitext(cleaned_name)[0]  # Remove extension
-            folder_name = re.sub(r'\s?chapters\s?\d*', '', folder_name, flags=re.IGNORECASE).strip()
+            folder_name = re.sub(r'\s?(metadata|chapters)\s?\d*', '', folder_name, flags=re.IGNORECASE).strip()
 
             destination_folder = os.path.join(input_dir, folder_name)
             os.makedirs(destination_folder, exist_ok=True)

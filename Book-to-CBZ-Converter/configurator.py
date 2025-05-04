@@ -31,6 +31,8 @@ CONFIG_FLAGS = {
         'min_chapters_for_split': (int, "Minimum chapters needed to split CBZ Book into chapters, set to 9999 to make a single CBZ for book. (integer)", 3),
         'overwrite_existing_cbz': (bool, "Overwrite existing CBZ files? (True/False)", True),
         'remove_prefix_cbz': (bool, "Remove 'V ' prefix from CBZ files? (neccessary clean up for file structure naming convention setting) (True/False)", True),
+        'HighRes': (bool, "Turn on high resolution for images?. False for standard. (recommended for images with text, increases file size) (True/False)", False),
+
     }
 }
 

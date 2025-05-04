@@ -31,12 +31,13 @@ input_dir = os.getcwd()  # Default to current directory. Change if needed.
 # Flags to control file deletions and features
 delete_pdf = True  # Set to True to delete the original PDF after processing. False keeps it.
 delete_json = True  # Set to True to delete the JSON files after processing. False keeps it.
-crop_white_margins_enabled = False  # Set to True to crop white margins from images (recommended). False skips cropping.
+crop_white_margins_enabled = False  # Set to True to crop white margins from images. False skips cropping.
 create_comicinfo_enabled = True  # Set to True to create a ComicInfo.xml file. False skips it.
 chapter_page_filter_threshold = 8  # Threshold for filtering chapter pages if 'chapter 2' in toc is not found.
 min_chapters_for_split = 3  # Minimum number of chapters to trigger chapter splitting.
 overwrite_existing_cbz = True # Set to True to overwrite existing cbz files. False skips if it exist
-remove_prefix_cbz = True  # Flag to control 'V ' prefix removal for CBZ
+remove_prefix_cbz = False  # Flag to control 'V ' prefix removal for CBZ
+HighRes = False  # Set to True to convert images with higher resolution. False for standard.
 
 
 # =============================================================
@@ -201,26 +202,36 @@ def crop_white_margins(image_path, padding=10):
         print_status(f"Skipping cropping white margins for: {image_path}", "info")
 
 # --- Function: Convert PDF to Images ---
-def convert_pdf_to_images(pdf_path, images_dir, start_page, end_page):
+def convert_pdf_to_images(pdf_path, images_dir, start_page, end_page, high_res=False):
     print_status(f"Converting PDF pages {start_page} to {end_page-1 if end_page else 'end'} to images...", "info")
     os.makedirs(images_dir, exist_ok=True)
-    command = [
-        "magick", "convert",
-        "-background", "white", "-alpha", "remove",
-        f"{pdf_path}[{start_page-1 if start_page > 0 else 0}-{end_page-2 if end_page and end_page > 1 else 'last'}]",
-        "-gravity", "Center",
-        "-extent", "100%x100%",
-        os.path.join(images_dir, "image-%04d.webp")
-    ]
+
+    command = ["magick", "convert",
+                "-background", "white", "-alpha", "remove",
+                f"{pdf_path}[{start_page-1 if start_page > 0 else 0}-{end_page-2 if end_page and end_page > 1 else 'last'}]",
+                "-gravity", "Center",
+                "-extent", "100%x100%"]
+
+    if high_res:
+        command.extend(["-density", "150", "-resize", "150%"])
+
+    command.append(os.path.join(images_dir, "image-%04d.webp"))
+
     try:
-        subprocess.run(command, check=True)
+        result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     except subprocess.CalledProcessError as e:
-        print_status(f"Error running magick convert: {e}", "error")
+        print_status(f"Error running magick convert: {e.stderr.strip()}", "error")
+
+#    try:
+#        subprocess.run(command, check=True)
+#    except subprocess.CalledProcessError as e:
+#        print_status(f"Error running magick convert: {e}", "error")
     for image_file in sorted(os.listdir(images_dir)):
         image_path = os.path.join(images_dir, image_file)
         if image_path.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')):
             crop_white_margins(image_path)
 
+            
 # --- Function: Create ComicInfo.xml ---
 def create_comicinfo(metadata, chapter_num, output_dir):
     comicinfo = f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -363,7 +374,7 @@ def main():
                         for i in range(len(chapter_pages) - 1):
                             start_page, end_page = chapter_pages[i], chapter_pages[i + 1]
                             images_dir = os.path.join(output_folder, f"chapter_{i+1}")
-                            convert_pdf_to_images(pdf_path, images_dir, start_page, end_page)
+                            convert_pdf_to_images(pdf_path, images_dir, start_page, end_page, high_res=HighRes)
 
                             # Fetch and parse metadata PER CHAPTER
                             metadata_file = get_metadata_json(pdf_path)
@@ -381,7 +392,7 @@ def main():
                     else:
                         images_dir = os.path.join(output_folder, "whole_pdf")
                         os.makedirs(images_dir, exist_ok=True)
-                        convert_pdf_to_images(pdf_path, images_dir, 0, 9999)
+                        convert_pdf_to_images(pdf_path, images_dir, 0, 9999, high_res=HighRes)
 
                         # Fetch and parse metadata for the whole PDF
                         metadata_file = get_metadata_json(pdf_path)
@@ -400,7 +411,7 @@ def main():
                     print_status(f"No chapter info found. Converting entire PDF to CBZ: {pdf_path}", "warn")
                     images_dir = os.path.join(output_folder, "whole_pdf")
                     os.makedirs(images_dir, exist_ok=True)
-                    convert_pdf_to_images(pdf_path, images_dir, 0, 9999)
+                    convert_pdf_to_images(pdf_path, images_dir, 0, 9999, high_res=HighRes)
 
                     # Fetch and parse metadata for the whole PDF
                     metadata_file = get_metadata_json(pdf_path)

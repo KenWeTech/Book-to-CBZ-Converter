@@ -23,6 +23,7 @@
 * **Python:** You need Python installed on your system (unless you are on Windows and choose to use the provided CMD file). You can download Python from [python.org](https://www.python.org/downloads/). **The `get_deps` folder contains scripts that can help automate the installation of Python dependencies.**
 * **Calibre:** For ePUB processing, you need Calibre installed on your system. The script relies on Calibre's `ebook-convert` tool. You can download it from [calibre-ebook.com](https://calibre-ebook.com/). **The dependency installation scripts in the `get_deps` folder will attempt to install Calibre for you.**
 * **PyMuPDF (fitz):** For robust and efficient image extraction from PDFs, it is highly recommended to install PyMuPDF. You can install it using pip: `pip install pymupdf`. While the script has a fallback, installing PyMuPDF will likely provide better results. **The dependency installation scripts in the `get_deps` folder will attempt to install PyMuPDF for you.**
+* **Ghostscript:** Required for processing some PDFs, particularly for page rendering. **The dependency installation scripts in the `get_deps` folder will attempt to install Ghostscript for you. On Windows, this might involve installing Chocolatey, which the script can also attempt to do if permitted.**
   
 ### Installation
 
@@ -31,7 +32,7 @@ The `get_deps` folder contains scripts to help you install all the necessary dep
 #### Windows
 
 1.  Navigate to the `get_deps` folder in your terminal or file explorer.
-2.  Run the `install_dependencies.cmd` script. This script will first check for Python and optionally try to install it using Winget if not found. Then, it will guide you through running `install_dependencies_p1.py` and `install_dependencies_p2.py` to install the required Python packages and attempt to install Calibre and ImageMagick using Winget.
+2.  Run the `install_dependencies.cmd` script. This script will first check for Python and optionally try to install it using Winget if not found. Then, it will guide you through running `install_dependencies_p1.py` and `install_dependencies_p2.py` to install the required Python packages and attempt to install Calibre, ImageMagick, and Ghostscript. For Ghostscript, if Chocolatey is not present, the script will offer to install it using Winget.
 
 #### macOS and Linux (and Windows)
 
@@ -44,15 +45,16 @@ The `get_deps` folder contains scripts to help you install all the necessary dep
     This script provides an interactive menu to run the following dependency installation scripts:
 
     * `install_dependencies_p1.py`: Installs core Python dependencies (`PyPDF2`, `ebooklib`, `beautifulsoup4`, `colorama`) and attempts to install Calibre automatically based on your operating system (using Winget on Windows, a direct download script on Linux, and brew cask on macOS). Which is everything require to run the `p1_process_books.py` script.
-    * `install_dependencies_p2.py`: Installs additional Python dependencies (`Pillow`, `fitz`, `PyPDF2`, `numpy`, `ebooklib`) and attempts to install **ImageMagick** automatically based on your operating system (using Winget on Windows, `apt-get` on Linux, and Homebrew on macOS). Which is everything required to run the `p2_create_cbz.py` script. 
+    * `install_dependencies_p2.py`: Installs additional Python dependencies (`Pillow`, `fitz`, `PyPDF2`, `numpy`, `ebooklib`) and attempts to install **ImageMagick** and **Ghostscript** automatically based on your operating system (using Winget on Windows for ImageMagick; Chocolatey via Winget for Ghostscript if needed; `apt-get` on Linux, and Homebrew on macOS). Which is everything required to run the `p2_create_cbz.py` script. 
 
     Follow the prompts in the `install_dependencies.py` script to install the necessary components. You can run this script again if needed to verify or reinstall specific dependencies.
 
 **Important Notes:**
 
-* The automatic installation of Calibre and ImageMagick might require administrative privileges on some systems.
+* The automatic installation of Calibre, ImageMagick, and Ghostscript might require administrative privileges on some systems.
 * If the automatic installation of Calibre fails, please visit [calibre-ebook.com](https://calibre-ebook.com/) for manual installation instructions.
 * If the automatic installation of ImageMagick fails, please visit the official ImageMagick website for manual installation instructions.
+* If the automatic installation of Ghostscript fails (or Chocolatey on Windows), please visit the official Ghostscript website and/or Chocolatey website for manual installation instructions.
 * The scripts will attempt to install `fitz` (PyMuPDF) automatically, which is highly recommended for better PDF image extraction.
 
 ## Usage

@@ -87,6 +87,16 @@ def modify_epub_font(epub_path):
             head.append(link_tag)
             item.set_body(str(soup))
 
+    # Ensure all TOC items have a UID (TEST)
+    for i, item in enumerate(book.toc):
+        if hasattr(item, 'uid') and item.uid is None:
+            # Generate a unique ID if missing
+            item.uid = f"navpoint_{i}_{int(time.time())}"
+            print_status(f"Assigned missing UID to TOC item: {item.uid}", "warn")
+        elif isinstance(item, tuple) and len(item) > 0 and hasattr(item[0], 'uid') and item[0].uid is None:
+            item[0].uid = f"navpoint_{i}_{int(time.time())}"
+            print_status(f"Assigned missing UID to nested TOC item: {item[0].uid}", "warn")
+
     # Save the modified EPUB
     modified_epub_path = epub_path.replace('.epub', '_modified.epub')
     epub.write_epub(modified_epub_path, book)
